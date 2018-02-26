@@ -23,9 +23,16 @@
        when: repochanged
        notify:
          - restart app
+     - name: Copy MQTT client
+       copy: src=~/celsius-test/pi/server/mqtt/ dest=/home/pi/celsius/pi/server/mqtt/
+       when: repochanged
+       notify:
+         - restart mqttapp
      - name: Copy cron scripts
        copy: src=~/celsius-test/pi/scripts/ dest=/home/pi/celsius/pi/scripts/
        when: repochanged
    handlers:
      - name: restart app
        supervisorctl: name=celsius-www state=restarted
+     - name: restart mqttapp
+       supervisorctl: name=celsius-mqtt state=restarted
